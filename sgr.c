@@ -32,26 +32,27 @@ char* slurp_file(const char * filepath) {
 
 int main(int argc, char **argv) {
     
-    if (argc != 2) {
-        printf("Usage: %s <storage_file>.sgr\n", argv[0]);
-        return EXIT_FAILURE;
+    // Run the program with a file
+    if (argc == 2) {
+        const char* filePath = argv[1];
+        char* fileContents = slurp_file(filePath);
+
+        // Use fileContents as needed
+        printf("%s", fileContents);
+
+        // Initialize SGR system
+        SGRSystem sgrSystem;
+        initialize_sgr_system(&sgrSystem);
+
+        // Process SGR commands
+        process_sgr_commands_file(&sgrSystem, fileContents);
+
+        // free memory for now
+        free(fileContents);
+
+        return EXIT_SUCCESS;
     }
 
-    const char* filePath = argv[1];
-    char* fileContents = slurp_file(filePath);
+    return EXIT_FAILURE;
 
-    // Use fileContents as needed
-    printf("%s", fileContents);
-
-    // Initialize SGR system
-    SGRSystem sgrSystem;
-    initialize_sgr_system(&sgrSystem);
-
-    // Process SGR commands
-    process_sgr_commands(&sgrSystem, fileContents);
-
-    // free memory for now
-    free(fileContents);
-
-    return EXIT_SUCCESS;
 }
