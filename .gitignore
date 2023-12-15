@@ -1,3 +1,4 @@
 *.exe
 *.sgr
 .vscode
+*.o
