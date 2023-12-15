@@ -1,5 +1,7 @@
+#include "sgr_process.h"
 #include <stdio.h>
 #include <stdlib.h>
+
 
 char* slurp_file(const char * filepath) {
     FILE* file = fopen(filepath, "rb");
@@ -40,7 +42,15 @@ int main(int argc, char **argv) {
 
     // Use fileContents as needed
     printf("%s", fileContents);
-    // Don't forget to free the allocated memory when done
+
+    // Initialize SGR system
+    SGRSystem sgrSystem;
+    initialize_sgr_system(&sgrSystem);
+
+    // Process SGR commands
+    process_sgr_commands(&sgrSystem, fileContents);
+
+    // free memory for now
     free(fileContents);
 
     return EXIT_SUCCESS;
