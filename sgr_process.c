@@ -45,7 +45,7 @@ void initialize_sgr_system(SGRSystem *system) {
     system->containers = 0;
 }
 
-void process_sgr_commands_file(SGRSystem *system, const char *fileContents) {
+void process_sgr_commands(SGRSystem *system, const char *fileContents) {
     // Create a non-constant copy of fileContents
     char *fileContentsCopy = strdup(fileContents);
     if (fileContentsCopy == NULL) {

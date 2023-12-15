@@ -14,6 +14,6 @@ typedef enum {
 } CommandType;
 
 void initialize_sgr_system(SGRSystem *system);
-void process_sgr_commands_file(SGRSystem *system, const char *fileContents);
+void process_sgr_commands(SGRSystem *system, const char *fileContents);
 
 #endif // SGR_PROCESS_H

@@ -1,6 +1,7 @@
 #include "sgr_process.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 char* slurp_file(const char * filepath) {
@@ -31,28 +32,54 @@ char* slurp_file(const char * filepath) {
 }
 
 int main(int argc, char **argv) {
+
+    SGRSystem sgrSystem;
+    initialize_sgr_system(&sgrSystem);
+
     
-    // Run the program with a file
     if (argc == 2) {
+        // Run the program with a file
         const char* filePath = argv[1];
         char* fileContents = slurp_file(filePath);
 
         // Use fileContents as needed
         printf("%s", fileContents);
 
-        // Initialize SGR system
-        SGRSystem sgrSystem;
-        initialize_sgr_system(&sgrSystem);
+        // Process SGR commands from file
+        process_sgr_commands(&sgrSystem, fileContents);
 
-        // Process SGR commands
-        process_sgr_commands_file(&sgrSystem, fileContents);
-
-        // free memory for now
+        // Free memory for now
         free(fileContents);
+    } else if (argc == 1) {
+        // No parameters provided, wait for user input
+        printf("Enter SGR commands. Type 'exit' to quit.\n");
+        char inputBuffer[1024];
+        size_t i = 0;
+        while (1) {
+            int c = getchar();
 
-        return EXIT_SUCCESS;
+            if (c == '\n' || c == EOF) {
+                inputBuffer[i] = '\0';
+
+                if (strcmp(inputBuffer, "exit") == 0) {
+                    break;
+                }
+
+                // Process SGR commands from user input
+                process_sgr_commands(&sgrSystem, inputBuffer);
+
+                // Reset the buffer index
+                i = 0;
+            } else if (i < sizeof(inputBuffer) - 1) {
+                // Store the character in the buffer
+                inputBuffer[i++] = (char)c;
+            }
+        }
+    } else {
+        printf("Usage: %s <storage_file>.sgr\n", argv[0]);
+        return EXIT_FAILURE;
     }
 
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 
 }
